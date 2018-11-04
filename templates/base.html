@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主机管理系统</title>
+
+
+    <!--STYLESHEET-->
+    <!--=================================================-->
+
+    <!--Open Sans Font [ OPTIONAL ]-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+
+    <!--Bootstrap Stylesheet [ REQUIRED ]-->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!--Nifty Stylesheet [ REQUIRED ]-->
+    <link href="/static/css/nifty.min.css" rel="stylesheet">
+
+
+    <!--Nifty Premium Icon [ DEMONSTRATION ]-->
+    <link href="/static/css/demo/nifty-demo-icons.min.css" rel="stylesheet">
+
+
+    <!--Demo [ DEMONSTRATION ]-->
+    <link href="/static/css/demo/nifty-demo.min.css" rel="stylesheet">
+
+
+    <!--Morris.js [ OPTIONAL ]-->
+    <link href="/static/plugins/morris-js/morris.min.css" rel="stylesheet">
+
+
+    <!--Magic Checkbox [ OPTIONAL ]-->
+    <link href="/static/plugins/magic-check/css/magic-check.min.css" rel="stylesheet">
+
+
+    
+    <!--JAVASCRIPT-->
+    <!--=================================================-->
+
+    <!--Pace - Page Load Progress Par [OPTIONAL]-->
+    <link href="/static/plugins/pace/pace.min.css" rel="stylesheet">
+    <script src="/static/plugins/pace/pace.min.js"></script>
+
+
+    <!--jQuery [ REQUIRED ]-->
+    <script src="/static/js/jquery-2.2.4.min.js"></script>
+
+
+    <!--BootstrapJS [ RECOMMENDED ]-->
+    <script src="/static/js/bootstrap.min.js"></script>
+
+
+    <!--NiftyJS [ RECOMMENDED ]-->
+    <script src="/static/js/nifty.min.js"></script>
+
+
+
+
+    <!--=================================================-->
+    
+    <!--Demo script [ DEMONSTRATION ]-->
+    <script src="/static/js/demo/nifty-demo.min.js"></script>
+
+    <!--Morris.js [ OPTIONAL ]-->
+    <script src="/static/plugins/morris-js/morris.min.js"></script>
+	<script src="/static/plugins/morris-js/raphael-js/raphael.min.js"></script>
+
+    <!--Sparkline [ OPTIONAL ]-->
+    <script src="/static/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+
+    {% block css_js %}{% endblock %}
+    <!--添加额外的css和js-->
+        
+
+</head>
+
+<body>
+    <div id="container" class="effect aside-float aside-bright mainnav-lg">
+        
+        <!--NAVBAR-->
+        <!--===================================================-->
+        <header id="navbar">
+            <div id="navbar-container" class="boxed">
+
+                <!--Brand logo & name-->
+                <!--================================-->
+                <div class="navbar-header">
+                    <a href="index.html" class="navbar-brand">
+                        <img src="/static/img/logo.png" alt="Nifty Logo" class="brand-icon">
+                        <div class="brand-title">
+                            <span class="brand-text">泛微eteams</span>
+                        </div>
+                    </a>
+                </div>
+                <!--================================-->
+                <!--End brand logo & name-->
+
+
+                <!--Navbar Dropdown-->
+                <!--================================-->
+                <div class="navbar-content clearfix">
+                    <ul class="nav navbar-top-links pull-left">
+
+                        <!--Navigation toogle button-->
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <li class="tgl-menu-btn">
+                            <a class="mainnav-toggle" href="#">
+                                <i class="demo-pli-view-list"></i>
+                            </a>
+                        </li>
+                    </ul>
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <!--End Navigation toogle button-->
+                        <!--只保留这一个折叠导航栏用的按钮，下面的内容全部删除掉-->
+                </div>
+                <!--================================-->
+                <!--End Navbar Dropdown-->
+
+            </div>
+        </header>
+        <!--===================================================-->
+        <!--END NAVBAR-->
+
+        <div class="boxed">
+
+            <!--CONTENT CONTAINER-->
+            <!--===================================================-->
+            <div id="content-container">
+                {% block content-container %}
+                {% endblock %}
+            </div>
+            <!--===================================================-->
+            <!--END CONTENT CONTAINER-->
+            <!--添加自己的组件内容-->
+
+            
+            <!--MAIN NAVIGATION-->
+            <!--===================================================-->
+            <nav id="mainnav-container">
+                <div id="mainnav">
+
+                    <!--Menu-->
+                    <!--================================-->
+                    <div id="mainnav-menu-wrap">
+                        <div class="nano">
+                            <div class="nano-content">
+
+                                <!--Profile Widget-->
+                                <!--================================-->
+                                <div id="mainnav-profile" class="mainnav-profile">
+                                    <div class="profile-wrap">
+                                        <div class="pad-btm">
+                                            <span class="label label-success pull-right">New</span>
+                                            <img class="img-circle img-sm img-border" src="/static/img/profile-photos/1.png" alt="Profile Picture">
+                                        </div>
+                                        <a href="#profile-nav" class="box-block" data-toggle="collapse" aria-expanded="false">
+                                            <span class="pull-right dropdown-toggle">
+                                                <i class="dropdown-caret"></i>
+                                            </span>
+                                            <p class="mnp-name">{{ msg.user }}</p>
+                                            <!--这个用户名是动态的-->
+                                            <span class="mnp-desc">上次登录时间：2017/11/10</span>
+                                        </a>
+                                    </div>
+                                    <div id="profile-nav" class="collapse list-group bg-trans">
+                                        <a href="/userinfo" class="list-group-item">
+                                            <i class="demo-pli-male icon-lg icon-fw"></i> 用户信息
+                                        </a>
+                                        <a href="#" class="list-group-item">
+                                            <i class="demo-pli-gear icon-lg icon-fw"></i> 设置
+                                        </a>
+                                        <a href="#" class="list-group-item">
+                                            <i class="demo-pli-information icon-lg icon-fw"></i> 帮助
+                                        </a>
+                                        <a href="/logout" class="list-group-item">
+                                            <i class="demo-pli-unlock icon-lg icon-fw"></i> 注销
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <ul id="mainnav-menu" class="list-group">
+
+						            <!--Category name-->
+						            <li class="list-header">功能菜单</li>
+
+						            <!--Menu list item-->
+						            <li {% block active-link-li-1 %}{% endblock %}>
+						                <a href="/index">
+						                    <i class="demo-psi-home"></i>
+						                    <span class="menu-title">
+												<strong>总览</strong>
+											</span>
+						                </a>
+						            </li>
+
+                                    <li {% block active-link-li-2 %}{% endblock %}>
+{#                                    <li class="active-link">#}
+						                <a href="/hostlist">
+						                    <i class="demo-psi-split-vertical-2"></i>
+						                    <span class="menu-title">
+												<strong>主机列表</strong>
+											</span>
+						                </a>
+						            </li>
+
+                                    <li {% block active-link-li-3 %}{% endblock %}>
+						                <a href="/jumpservermanager">
+						                    <i class="demo-psi-boot-2"></i>
+						                    <span class="menu-title">
+												<strong>堡垒机管理</strong>
+{#                                                <span class="pull-right badge badge-warning">24</span>#}
+											</span>
+						                </a>
+						            </li>
+
+                                    <li {% block active-link-li-4 %}{% endblock %}>
+                                        <a href="#" aria-expanded="true">
+                                            <i class="demo-psi-mail"></i>
+                                            <span class="menu-title">配置管理</span>
+                                            <i class="arrow"></i>
+                                        </a>
+                                        <ul class="collapse" aria-expanded="false" style>
+                                            <li {% block active-link-li-4-1 %}{% endblock %}>
+                                                <a href="/configmanager">主机组管理</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+						            <li {% block active-link-li-5 %}{% endblock %}>
+						                <a href="index">
+						                    <i class="demo-psi-receipt-4"></i>
+						                    <span class="menu-title">
+												<strong>批量操作</strong>
+											</span>
+						                </a>
+						            </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--================================-->
+                    <!--End menu-->
+
+                </div>
+            </nav>
+            <!--===================================================-->
+            <!--END MAIN NAVIGATION-->
+            <!--左边导航菜单栏-->
+
+        </div>
+
+
+
+        <!-- SCROLL PAGE BUTTON -->
+        <!--===================================================-->
+        <button class="scroll-top btn">
+            <i class="pci-chevron chevron-up"></i>
+        </button>
+        <!--===================================================-->
+
+
+
+    </div>
+    <!--===================================================-->
+    <!-- END OF CONTAINER -->
+
+
+</body>
+</html>
