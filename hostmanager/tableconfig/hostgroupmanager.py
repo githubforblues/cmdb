@@ -15,13 +15,13 @@ config = {
         {
             'name': '删除',
             'button_type': 'delete',                                # 指定按钮的类型，供前端获取并绑定事件
-            'uri_prefix': '/configmanager/delete/',                 # 指定操作的API的前缀
+            'uri_prefix': '/hostgroupmanager/delete/',              # 指定操作的API的前缀
             'edit_flag': 'id',                                      # 指定操作所依赖的ID
         },
         {
             'name': '编辑',
             'button_type': 'edit',
-            'uri_prefix': '/configmanager/edit/',
+            'uri_prefix': '/hostgroupmanager/edit/',
             'edit_flag': 'id',
         },
     ],

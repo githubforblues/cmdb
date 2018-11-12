@@ -378,6 +378,7 @@ function submitbutton_switch_to_addbutton() {
     // $('#demo-dt-addrow-btn').html('<i class="demo-pli-plus"></i> Add Row');
     // $('#demo-dt-addrow-btn').on('click', addrow_button_click);      // 为添加按钮重新绑定点击事件
     // $('#dt-addrow-addform-hide').hide();            // 隐藏新增表单
+    window.location.reload();
 }
 
 

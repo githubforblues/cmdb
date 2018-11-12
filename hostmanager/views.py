@@ -3,12 +3,11 @@ from django import views
 from hostmanager import models
 from django.utils.decorators import method_decorator
 from hostmanager import forms
-from .tableconfig import jumpservermanager
+from .tableconfig import servicemanager
 from .tableconfig import hostgroupmanager
 from .utils import configanalysis, dataget
 from json import dumps, loads
 from django.db.models import Q
-
 
 
 # 用户登录
@@ -126,82 +125,90 @@ class HostEdit(views.View):
 
 # ------------------------------------------------- #
 
-# 堡垒机管理
-class JSM(views.View):
+# 服务管理
+class SM(views.View):
     @method_decorator(auth_check)
     def get(self, request, *args, **kwargs):
         msg = {}
         user = request.session.get('user', '游客')
         msg.update({'user': user})
 
-        thead_list, quertset, editformobj, addformobj = configanalysis.configanalysis(jumpservermanager.config)
+        thead_list, quertset, editformobj, addformobj = configanalysis.configanalysis(servicemanager.config)
 
-        return render(request, 'jumpservermanager.html', {'msg': msg, 'thead_list': thead_list, 'oadd': addformobj, 'oedit': editformobj, 'hg':quertset})
+        return render(request, 'servicemanager.html', {'msg': msg, 'thead_list': thead_list, 'oadd': addformobj, 'oedit': editformobj, 'hg':quertset})
 
-# 堡垒机管理，条目删除
-class JSMdelete(views.View):
+# 服务管理，条目删除
+class SMdelete(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
         data = request.POST.get('rowid', None)
         rowlist = data.split(',')
-        # result = [ models.JumpServerAccountManager.objects.filter(id=rowid).delete() for rowid in rowlist ]           // 删除功能暂时关闭
+        # result = [ models.ServiceManager.objects.filter(id=rowid).delete() for rowid in rowlist ]           // 删除功能暂时关闭
         return HttpResponse('success')
 
-# 堡垒机管理，更改保存（这个函数是业务相关的，而非通用的，目前仅能用于 主机账号字段+多选下拉菜单 的情况）
-class JSMedit(views.View):
+# 服务管理，更改保存
+class SMedit(views.View):
     @method_decorator(auth_check)
+    # def post(self, request, *args, **kwargs):
+    #     for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
+    #         item = loads(item)
+    #         row_id = item.get('rowid').split(',')[0]         # 在合并数据中，行ID用于查询用户名和主机名，所以只要第一个即可
+    #         account_list = item.get('主机账号')
+    #
+    #     querydata = models.JumpServerAccountManager.objects.filter(id=row_id).values('userid', 'serveraccount__hostid')[0]
+    #     userid = querydata.get('userid')
+    #     hostid = querydata.get('serveraccount__hostid')
+    #
+    #     ServerAccountID_quertset = models.ServerAccount.objects.filter(hostid=hostid).values('id')          # 先查出某个主机的所有账号
+    #     ServerAccountID_list = []
+    #     [ ServerAccountID_list.append(item.get('id')) for item in ServerAccountID_quertset ]
+    #
+    #     models.JumpServerAccountManager.objects.filter(Q(userid=userid), Q(serveraccount__in=ServerAccountID_list)).delete()            # 查出某个用户所具有的某个主机的账号，全部删除
+    #     [ models.JumpServerAccountManager.objects.create(userid_id=userid, serveraccount_id=account) for account in account_list ]      # 根据下拉菜单的选择项，给用户增加新账号
+    #     return HttpResponse('success')
+
     def post(self, request, *args, **kwargs):
-        for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
+        for item in request.POST:
             item = loads(item)
-            row_id = item.get('rowid').split(',')[0]         # 在合并数据中，行ID用于查询用户名和主机名，所以只要第一个即可
-            account_list = item.get('主机账号')
-
-        querydata = models.JumpServerAccountManager.objects.filter(id=row_id).values('userid', 'serveraccount__hostid')[0]
-        userid = querydata.get('userid')
-        hostid = querydata.get('serveraccount__hostid')
-
-        ServerAccountID_quertset = models.ServerAccount.objects.filter(hostid=hostid).values('id')          # 先查出某个主机的所有账号
-        ServerAccountID_list = []
-        [ ServerAccountID_list.append(item.get('id')) for item in ServerAccountID_quertset ]
-
-        models.JumpServerAccountManager.objects.filter(Q(userid=userid), Q(serveraccount__in=ServerAccountID_list)).delete()            # 查出某个用户所具有的某个主机的账号，全部删除
-        [ models.JumpServerAccountManager.objects.create(userid_id=userid, serveraccount_id=account) for account in account_list ]      # 根据下拉菜单的选择项，给用户增加新账号
+            data = {'path':item['路径'], 'port':item['端口号'], 'inhost':item['服务所在节点'], 'desc':item['描述信息']}
+            models.ServiceManager.objects.filter(id=item['rowid']).update(**data)
         return HttpResponse('success')
 
-# 堡垒机管理，菜单初始化数据获取
-class JSMdatainit(views.View):
+# 服务管理，菜单初始化数据获取
+class SMdatainit(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
         rowid = request.POST.get('rowid')
         label = request.POST.get('label')
         type = request.POST.get('type')
-        data = dataget.dataget(jumpservermanager, type, label, rowid)
+        data = dataget.dataget(servicemanager, type, label, rowid)
         return HttpResponse(dumps(dict(data)))
 
-# 堡垒机管理，新增数据
-class JSMadd(views.View):
+# 服务管理，新增数据
+class SMadd(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
         for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
             item = loads(item)
-
-        account = models.ServerAccount.objects.filter(hostid_id=item.get('主机实例名'), account=item.get('主机账号'))
-        if not account :
-            print('create1')
-            account = models.ServerAccount.objects.create(hostid_id=item.get('主机实例名'), account=item.get('主机账号'))        # 如果要添加的账号已经存在，则获取；没有则创建
-        else:
-            account = account[0]
-
-        jamrow = models.JumpServerAccountManager.objects.filter(userid_id=item.get('用户名'), serveraccount_id=account.id)
-        if not jamrow:
-            models.JumpServerAccountManager.objects.create(userid_id=item.get('用户名'), serveraccount_id=account.id)
+            data = {'servicename':item['服务名'], 'path':item['路径'], 'port':item['端口号'], 'inhost_id':item['服务所在节点'], 'desc':item['描述信息']}
+            models.ServiceManager.objects.create(**data)
+        # account = models.ServerAccount.objects.filter(hostid_id=item.get('主机实例名'), account=item.get('主机账号'))
+        # if not account :
+        #     print('create1')
+        #     account = models.ServerAccount.objects.create(hostid_id=item.get('主机实例名'), account=item.get('主机账号'))        # 如果要添加的账号已经存在，则获取；没有则创建
+        # else:
+        #     account = account[0]
+        #
+        # jamrow = models.JumpServerAccountManager.objects.filter(userid_id=item.get('用户名'), serveraccount_id=account.id)
+        # if not jamrow:
+        #     models.JumpServerAccountManager.objects.create(userid_id=item.get('用户名'), serveraccount_id=account.id)
 
         return HttpResponse('success')
 
 # ------------------------------------------------- #
 
-# 配管管理
-class CM(views.View):
+# 配置管理 - 主机组管理
+class HGM(views.View):
     @method_decorator(auth_check)
     def get(self, request, *args, **kwargs):
         msg = {}
@@ -212,7 +219,8 @@ class CM(views.View):
 
         return render(request, 'hostgroupmanager.html', {'msg': msg, 'thead_list': thead_list, 'oadd': addformobj, 'oedit': editformobj, 'hg':quertset})
 
-class CMdelete(views.View):
+# 配置管理 - 主机组管理，条目删除
+class HGMdelete(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
         data = request.POST.get('rowid', None)
@@ -220,13 +228,13 @@ class CMdelete(views.View):
         # result = [ models.JumpServerAccountManager.objects.filter(id=rowid).delete() for rowid in rowlist ]           // 删除功能暂时关闭
         return HttpResponse('success')
 
-class CMedit(views.View):
+class HGMedit(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
         return HttpResponse('success')
 
 # 配管管理，菜单初始化数据获取
-class CMdatainit(views.View):
+class HGMdatainit(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
         rowid = request.POST.get('rowid')
@@ -235,7 +243,7 @@ class CMdatainit(views.View):
         data = dataget.dataget(hostgroupmanager, type, label, rowid)
         return HttpResponse(dumps(dict(data)))
 
-class CMadd(views.View):
+class HGMadd(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
         return HttpResponse('success')
