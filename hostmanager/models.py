@@ -42,3 +42,10 @@ class Host2HostGroup(models.Model):
 class Empty(models.Model):
     empty = models.CharField(max_length=1)
 
+
+class ServiceManager(models.Model):
+    servicename = models.CharField(max_length=64)
+    port = models.CharField(max_length=64)
+    path = models.CharField(max_length=64)
+    desc = models.CharField(max_length=64)
+    inhost = models.ForeignKey(EteamsHost)

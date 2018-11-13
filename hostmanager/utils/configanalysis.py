@@ -152,6 +152,10 @@ def mergerow(index, queryset):
 
 
 
+
+
+
+
 # 用于编辑和增加条目的djangoform的示例
 
 # class HostGroupEditForm(forms.Form):
@@ -171,17 +175,6 @@ def mergerow(index, queryset):
 #         to_field_name = 'id',
 #         widget = forms.widgets.Select(attrs={'label': '所属组', 'class': 'chosen-select'})
 #     )
-
-
-
-
-
-
-
-
-
-
-
 
 
 

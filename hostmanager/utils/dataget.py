@@ -10,7 +10,6 @@ def dataget(tableconfig, exterkeyname, interkeyname, rowid):
                     return data
                 else:                                                                 # 如果没有自定义方法，则直接从数据库中获取数据
                     table = getattr(models, item.get('model'))
-                    print('1+' + item.get('model'))
                     data = table.objects.all().values_list('id', item.get('field'))
                     return data
 
