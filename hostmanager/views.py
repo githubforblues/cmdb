@@ -143,7 +143,7 @@ class SMdelete(views.View):
     def post(self, request, *args, **kwargs):
         data = request.POST.get('rowid', None)
         rowlist = data.split(',')
-        # result = [ models.ServiceManager.objects.filter(id=rowid).delete() for rowid in rowlist ]           // 删除功能暂时关闭
+        # result = [ models.ServiceManager.objects.filter(id=rowid).delete() for rowid in rowlist ]           # 删除功能暂时关闭
         return HttpResponse('success')
 
 # 服务管理，更改保存
@@ -225,12 +225,20 @@ class HGMdelete(views.View):
     def post(self, request, *args, **kwargs):
         data = request.POST.get('rowid', None)
         rowlist = data.split(',')
-        # result = [ models.JumpServerAccountManager.objects.filter(id=rowid).delete() for rowid in rowlist ]           // 删除功能暂时关闭
+        result = [ models.Host2HostGroup.objects.filter(id=rowid).delete() for rowid in rowlist ]           # 删除功能暂时关闭
         return HttpResponse('success')
 
+# 配置管理 - 主机组管理，条目编辑
 class HGMedit(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
+        for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
+            item = loads(item)
+            hg = models.Host2HostGroup.objects.get(id=item['rowid'].split(',')[0]).hostgroupid_id
+            models.Host2HostGroup.objects.filter(hostgroupid_id=hg).delete()
+            for i in item['主机']:
+                pass
+                models.Host2HostGroup.objects.create(hostgroupid_id=hg, hostid_id=i)
         return HttpResponse('success')
 
 # 配管管理，菜单初始化数据获取
@@ -243,13 +251,20 @@ class HGMdatainit(views.View):
         data = dataget.dataget(hostgroupmanager, type, label, rowid)
         return HttpResponse(dumps(dict(data)))
 
+# 配置管理 - 主机组管理，新增数据
 class HGMadd(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
+        for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
+            item = loads(item)
+            hg = models.HostGroup.objects.get_or_create(hostgroupname=item['主机组'])
+            for i in item['主机实例名']:
+                models.Host2HostGroup.objects.get_or_create(hostgroupid_id=hg[0].id,hostid_id=int(i))
         return HttpResponse('success')
 
 # ------------------------------------------------- #
 
+# 文档库
 class DocHome(views.View):
     @method_decorator(auth_check)
     def get(self, request, *args, **kwargs):
