@@ -953,7 +953,7 @@
     resize: 'none',
     iconlibrary: 'glyph',
     language: 'en',
-    initialstate: 'editor',
+    initialstate: 'preview',        // 这一项用来确定初始状态，可选项为 preview editor fullscreen
     parser: null,
     dropZoneOptions: null,
 

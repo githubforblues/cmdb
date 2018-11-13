@@ -248,7 +248,16 @@ class HGMadd(views.View):
     def post(self, request, *args, **kwargs):
         return HttpResponse('success')
 
+# ------------------------------------------------- #
 
+class DocHome(views.View):
+    @method_decorator(auth_check)
+    def get(self, request, *args, **kwargs):
+        msg = {}
+        user = request.session.get('user', '游客')
+        msg.update({'user': user})
+
+        return render(request, 'documenthome.html', {'msg': msg})
 
 
 

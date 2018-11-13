@@ -40,6 +40,8 @@ urlpatterns = [
     url(r'^hostgroupmanager/add/', views.HGMadd.as_view()),
     url(r'^hostgroupmanager/', views.HGM.as_view()),
 
+    url(r'^documents/', views.DocHome.as_view()),
+
     url(r'^api/jumpserver/auth/', api_views.JS_auth.as_view()),
     url(r'^api/jumpserver/accountget/', api_views.JS_accountget.as_view()),
 
