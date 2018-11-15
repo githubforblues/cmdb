@@ -41,6 +41,8 @@ urlpatterns = [
     url(r'^hostgroupmanager/', views.HGM.as_view()),
 
     url(r'^documents/savedata/', views.DocSavedata.as_view()),
+    url(r'^documents/deletedata/', views.DocDeletedata.as_view()),
+    url(r'^documents/createdata/', views.DocCreatedata.as_view()),
     url(r'^documents/(?P<docnumber>.*)', views.Doc.as_view()),
 
     url(r'^api/jumpserver/auth/', api_views.JS_auth.as_view()),
@@ -48,6 +50,7 @@ urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
 ]
+
 
 
 

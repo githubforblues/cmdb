@@ -274,14 +274,14 @@ class Doc(views.View):
 
         if not docnumber:
             docdir = models.DocumentDir.objects.filter()[0]
-            doc = models.Documents.objects.filter()[0]
+            doc = models.Documents.objects.filter(is_delete=False)[0]
             return redirect('/documents/{}-{}'.format(docdir.id, doc.id))
 
         docdirlist = models.DocumentDir.objects.filter()
 
         doc = []
         for i in docdirlist:
-            doc.append([i, models.Documents.objects.filter(docdir=i)])
+            doc.append([i, models.Documents.objects.filter(docdir=i, is_delete=False)])
 
         docview = models.Documents.objects.get(id=docnumber.split('-')[1])
 
@@ -298,8 +298,24 @@ class DocSavedata(views.View):
 
         return HttpResponse('success')
 
+# 文档删除
+class DocDeletedata(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        doc = request.POST['doc']
+        models.Documents.objects.filter(id=doc).update(is_delete=True)
+        return HttpResponse('success')
 
+# 文档新增
+class DocCreatedata(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        docname = request.POST['docname']
+        docdirid = request.POST['docdirid']
 
+        if docname:
+            docid = models.Documents.objects.create(docname=docname, docdir_id=docdirid, auther_id='1').id
+        return HttpResponse(docid)
 
 
 

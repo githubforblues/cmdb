@@ -58,11 +58,10 @@ class DocumentDir(models.Model):                          # 文档目录表
 class Documents(models.Model):                            # 文档表
     docname = models.CharField(max_length=256)
     doc = models.TextField(max_length=4096)
+    is_delete = models.BooleanField(default=False)        # 文档状态，false未删除，true已删除
+
     auther = models.ForeignKey(SystemUser)
     docdir = models.ForeignKey(DocumentDir)
-
-
-
 
 
 

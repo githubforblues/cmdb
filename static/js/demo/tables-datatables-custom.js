@@ -372,12 +372,6 @@ function submitdata(submitto) {
 
 // 更改提交按钮的文本和ID
 function submitbutton_switch_to_addbutton() {
-    // $('#dt-submit-btn').off('click');       // 提交按钮解绑事件
-    // $('#dt-submit-btn').attr('id', 'demo-dt-addrow-btn');
-    // $('#dt-submit-btn').html('');
-    // $('#demo-dt-addrow-btn').html('<i class="demo-pli-plus"></i> Add Row');
-    // $('#demo-dt-addrow-btn').on('click', addrow_button_click);      // 为添加按钮重新绑定点击事件
-    // $('#dt-addrow-addform-hide').hide();            // 隐藏新增表单
     window.location.reload();
 }
 
