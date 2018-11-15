@@ -265,16 +265,38 @@ class HGMadd(views.View):
 # ------------------------------------------------- #
 
 # 文档库
-class DocHome(views.View):
+class Doc(views.View):
     @method_decorator(auth_check)
-    def get(self, request, *args, **kwargs):
+    def get(self, request, docnumber, *args, **kwargs):
         msg = {}
         user = request.session.get('user', '游客')
         msg.update({'user': user})
 
-        return render(request, 'documenthome.html', {'msg': msg})
+        if not docnumber:
+            docdir = models.DocumentDir.objects.filter()[0]
+            doc = models.Documents.objects.filter()[0]
+            return redirect('/documents/{}-{}'.format(docdir.id, doc.id))
 
+        docdirlist = models.DocumentDir.objects.filter()
 
+        doc = []
+        for i in docdirlist:
+            doc.append([i, models.Documents.objects.filter(docdir=i)])
+
+        docview = models.Documents.objects.get(id=docnumber.split('-')[1])
+
+        return render(request, 'document.html', {'msg': msg, 'docdirlist': docdirlist, 'doc': doc, 'docview': docview})
+
+# 文档保存
+class DocSavedata(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        doc = request.POST['doc']
+        data = request.POST['data']
+
+        models.Documents.objects.filter(id=doc).update(doc=data)
+
+        return HttpResponse('success')
 
 
 

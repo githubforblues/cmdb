@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class SystemUser(models.Model):
+class SystemUser(models.Model):                         # 用户表
     username = models.CharField(max_length = 64)        # 用户名
     password = models.CharField(max_length = 64)        # 密码
     is_admin = models.BooleanField(default = True)      # 是否管理员
@@ -19,33 +19,53 @@ class EteamsHost(models.Model):
         return self.hostinstancename
 
 
-class ServerAccount(models.Model):
-    account = models.CharField(max_length= 64)          # 主机账号
-    password = models.CharField(max_length=64, default='123456')      # 主机账号的密码（在主机编辑页面中修改）
-    hostid = models.ForeignKey(EteamsHost)              # 主机ID
+# class ServerAccount(models.Model):
+#     account = models.CharField(max_length= 64)          # 主机账号
+#     password = models.CharField(max_length=64, default='123456')      # 主机账号的密码（在主机编辑页面中修改）
+#     hostid = models.ForeignKey(EteamsHost)              # 主机ID
+#
+#
+# class JumpServerAccountManager(models.Model):
+#     userid = models.ForeignKey(SystemUser)              # 用户ID
+#     serveraccount = models.ForeignKey(ServerAccount)    # 主机账号ID
 
 
-class JumpServerAccountManager(models.Model):
-    userid = models.ForeignKey(SystemUser)              # 用户ID
-    serveraccount = models.ForeignKey(ServerAccount)    # 主机账号ID
-
-
-class HostGroup(models.Model):
+class HostGroup(models.Model):                            # 主机组表
     hostgroupname = models.CharField(max_length=64)
 
 
-class Host2HostGroup(models.Model):
+class Host2HostGroup(models.Model):                       # 主机&主机组关系表
     hostid = models.ForeignKey(EteamsHost)
     hostgroupid = models.ForeignKey(HostGroup)
 
 
-class Empty(models.Model):
+class Empty(models.Model):                                # 空表，用于条目编辑和条目新增的可选项填充
     empty = models.CharField(max_length=1)
 
 
-class ServiceManager(models.Model):
+class ServiceManager(models.Model):                       # 服务管理表
     servicename = models.CharField(max_length=64)
     port = models.CharField(max_length=64)
     path = models.CharField(max_length=64)
     desc = models.CharField(max_length=64)
     inhost = models.ForeignKey(EteamsHost)
+
+
+class DocumentDir(models.Model):                          # 文档目录表
+    dirname = models.CharField(max_length=256)
+
+
+class Documents(models.Model):                            # 文档表
+    docname = models.CharField(max_length=256)
+    doc = models.TextField(max_length=4096)
+    auther = models.ForeignKey(SystemUser)
+    docdir = models.ForeignKey(DocumentDir)
+
+
+
+
+
+
+
+
+
