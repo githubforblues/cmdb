@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block css_js %}
+    <!--DataTables [ OPTIONAL ]-->
+    <link href="/static/plugins/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
+	<link href="/static/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+
+    <!--DataTables [ OPTIONAL ]-->
+    <script src="/static/plugins/datatables/media/js/jquery.dataTables.js"></script>
+	<script src="/static/plugins/datatables/media/js/dataTables.bootstrap.js"></script>
+	<script src="/static/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+
+
+    <!--DataTables Sample [ SAMPLE ]-->
+    <script src="/static/js/demo/tables-datatables-custom.js"></script>
+    <script src="/static/js/demo/form-component.js"></script>
+
+
+    <!--Chosen-->
+    <link href="/static/plugins/chosen/chosen.min.css" rel="stylesheet">
+    <script src="/static/plugins/chosen/chosen.jquery.min.js"></script>
+
+
+    <!--Markdown-->
+    <link href="/static/plugins/fooTable/demos/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link href="/static/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css" rel="stylesheet">
+    <script src="/static/plugins/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+    <script src="/static/plugins/bootstrap-markdown/js/to-markdown.js"></script>
+    <script src="/static/plugins/bootstrap-markdown/js/markdown.js"></script>
+    <script src="/static/js/cmdb/documents.js"></script>
+
+
+    <style type="text/css">
+        .doclist {
+            padding: 0px;
+        }
+        .doclist li {
+            list-style: none;
+        }
+        .doclist li a {
+            display: block; height: 60px; padding: 12px; color: #505050; padding-left: 18px;
+        }
+        .doclist li a:hover {
+            background-color: #d0d0d0;
+        }
+        .doclist li:nth-child(even) {
+            background-color: #f0f0f0;
+        }
+        .doc-dir-active:before {
+            content: ''; float: left; height: 60px; width: 6px; background-color: red;
+        }
+        .doc-active:before {
+            content: ''; float: left; height: 60px; width: 6px; background-color: #74b2e2;
+        }
+        .docdirbox {
+            border: 1px solid #d0d0d0; height: 650px;
+        }
+        .docbox {
+            border: 1px solid #d0d0d0; height: 650px;
+        }
+        #creatediv {
+            display: none; height: 100px; width: 400px; background-color: white; border-radius: 3px; border: 2px dashed;
+            position: absolute; top: 0px; left: 0px; z-index: 20;
+            font-size: 16px; padding-top: 30px; padding-left: 10px;
+        }
+        #creatediv_mask {
+            display: none; height: 0px; width: 0px;
+            position: absolute; top: 0px; left: 0px; z-index: 19;
+            background-color: #d0d0d0; opacity:0.4;
+        }
+{#        #creatediv #}
+    </style>
+
+{% endblock %}
+
+{% block active-link-li-5 %}
+    class="active-link"
+{% endblock %}
+
+{% block content-container %}
+    <!--Page Title-->
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <div id="page-title">
+        <h1 class="page-header text-overflow">文档库</h1>
+    </div>
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <!--End page title-->
+
+    <!--Page content-->
+    <!--===================================================-->
+    <div id="page-content">
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">运维文档管理</h3>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="col-sm-2">
+                    <div class="docdirbox">
+                        <ul class="doclist">
+                            {% for docdir in docdirlist %}
+                                <li><a href="javascript:void(0);" id="{{ docdir.id }}">{{ docdir.dirname }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="docbox">
+                        {% for i in doc %}
+                            <ul class="doclist" style="display: none" id="{{ i.0.id }}">
+                            {% for j in i.1 %}
+                                <li><a href="/documents/{{ i.0.id }}-{{ j.id }}" id="{{ j.id }}">{{ j.docname }}</a></li>
+                            {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div id="creatediv">
+                    文档标题：<input type="text" name="docname" value="" style="width:200px;"/>
+                    <button class="btn btn-primary">创建</button>
+                </div>
+                <div id="creatediv_mask"></div>
+
+                <div class="col-sm-8">
+                    <div style="font-size: 20px; color: #000000">{{ docview.docname }}</div>
+                    <br/>
+                    <button id="createbuttom" class="btn btn-primary">创建文档</button>
+                    <button id="savebuttom" class="btn btn-warning">保存文档</button>
+                    <button id="deletebuttom" class="btn btn-danger" style="float: right">删除文档</button>
+                    <br/>
+                    <br/>
+                    <textarea name="content" data-provide="markdown" rows="24">
+{{ docview.doc }}</textarea>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!--===================================================-->
+    <!--End page content-->
+{% endblock %}
+
+
+
+
+
+
