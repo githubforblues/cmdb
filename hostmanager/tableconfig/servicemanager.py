@@ -10,12 +10,8 @@ config = {
             'field': 'inhost__hostinstancename',
         },
         {
-            'name': '路径',
-            'field': 'path',
-        },
-        {
-            'name': '端口号',
-            'field': 'port'
+            'name': '容器数量',
+            'field': 'number',
         },
         {
             'name': '描述信息',
@@ -50,13 +46,9 @@ config = {
             'field': 'hostinstancename',
         },
         {
-            'name': '路径',
-            'form_name': 'path',
-            'form_type': 'text',
-        },
-        {
-            'name': '端口号',
-            'form_name': 'port',
+            'name': '容器数量',
+            'field': 'number',
+            'form_name': 'number',
             'form_type': 'text',
         },
         {

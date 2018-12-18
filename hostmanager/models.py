@@ -47,6 +47,7 @@ class ServiceManager(models.Model):                       # 服务管理表
     servicename = models.CharField(max_length=64)
     port = models.CharField(max_length=64)
     path = models.CharField(max_length=64)
+    number = models.IntegerField(default=0)
     desc = models.CharField(max_length=64)
     inhost = models.ForeignKey(EteamsHost)
 
@@ -62,7 +63,6 @@ class Documents(models.Model):                            # 文档表
 
     auther = models.ForeignKey(SystemUser)
     docdir = models.ForeignKey(DocumentDir)
-
 
 
 

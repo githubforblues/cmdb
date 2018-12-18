@@ -170,7 +170,7 @@ class SMedit(views.View):
     def post(self, request, *args, **kwargs):
         for item in request.POST:
             item = loads(item)
-            data = {'path':item['路径'], 'port':item['端口号'], 'inhost':item['服务所在节点'], 'desc':item['描述信息']}
+            data = {'number':item['容器数量'], 'inhost':item['服务所在节点'], 'desc':item['描述信息']}
             models.ServiceManager.objects.filter(id=item['rowid']).update(**data)
         return HttpResponse('success')
 
@@ -190,7 +190,7 @@ class SMadd(views.View):
     def post(self, request, *args, **kwargs):
         for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
             item = loads(item)
-            data = {'servicename':item['服务名'], 'path':item['路径'], 'port':item['端口号'], 'inhost_id':item['服务所在节点'], 'desc':item['描述信息']}
+            data = {'servicename':item['服务名'], 'number':item['容器数量'], 'inhost_id':item['服务所在节点'], 'desc':item['描述信息']}
             models.ServiceManager.objects.create(**data)
         # account = models.ServerAccount.objects.filter(hostid_id=item.get('主机实例名'), account=item.get('主机账号'))
         # if not account :
