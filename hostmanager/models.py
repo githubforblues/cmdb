@@ -65,6 +65,12 @@ class Documents(models.Model):                            # 文档表
     docdir = models.ForeignKey(DocumentDir)
 
 
+class ServiceDeployStatus(models.Model):
+    desc = models.CharField(max_length=256)
+    status = models.BooleanField(default=True)            # 当前发布状态（系统异常时，需要人工介入处理该值的不正确情况）
+    lastdeploytime = models.DateTimeField(null=True)      # 最近一次发布时间
+
+    service = models.ForeignKey(ServiceManager)
 
 
 

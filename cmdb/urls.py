@@ -28,6 +28,12 @@ urlpatterns = [
     url(r'^hostedit_(?P<hostname>.*)/', views.HostEdit.as_view()),
     url(r'^hostedit/', views.HostEdit.as_view()),
 
+    url(r'^autodeploy/delete/', views.ADdelete.as_view()),
+    url(r'^autodeploy/edit/', views.ADedit.as_view()),
+    url(r'^autodeploy/datainit/', views.ADdatainit.as_view()),
+    url(r'^autodeploy/add/', views.ADadd.as_view()),
+    url(r'^autodeploy/', views.AD.as_view()),
+
     url(r'^servicemanager/delete/', views.SMdelete.as_view()),
     url(r'^servicemanager/edit/', views.SMedit.as_view()),
     url(r'^servicemanager/datainit/', views.SMdatainit.as_view()),

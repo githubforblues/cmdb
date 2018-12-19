@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block css_js %}
+    <!--DataTables [ OPTIONAL ]-->
+    <link href="/static/plugins/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
+	<link href="/static/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+
+    <!--DataTables [ OPTIONAL ]-->
+    <script src="/static/plugins/datatables/media/js/jquery.dataTables.js"></script>
+	<script src="/static/plugins/datatables/media/js/dataTables.bootstrap.js"></script>
+	<script src="/static/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+
+
+    <!--DataTables Sample [ SAMPLE ]-->
+    <script src="/static/js/demo/tables-datatables-custom.js"></script>
+    <script src="/static/js/demo/form-component.js"></script>
+
+
+    <!--Chosen-->
+    <link href="/static/plugins/chosen/chosen.min.css" rel="stylesheet">
+    <script src="/static/plugins/chosen/chosen.jquery.min.js"></script>
+
+{% endblock %}
+
+{% block active-link-li-4 %}
+    class="active-sub active"
+{% endblock %}
+
+{% block active-link-li-4-1 %}
+    class="active-link"
+{% endblock %}
+
+{% block content-container %}
+    <!--Page Title-->
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <div id="page-title">
+        <h1 class="page-header text-overflow">一键发布</h1>
+    </div>
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <!--End page title-->
+
+    <!--Page content-->
+    <!--===================================================-->
+    <div id="page-content">
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">点击发布按钮后，在发布进度页面查看发布状态</h3>
+            </div>
+
+            <div id="dt-addrow-addform-hide" class="panel-body" style="display: none">
+                <form class="form-horizontal" submitto="/autodeploy/add/">
+                    {{ oadd.servicename }}
+                    {{ oadd.desc }}
+                </form>
+            </div>
+
+            <div id="demo-custom-toolbar2" class="table-toolbar-left">
+                <button id="demo-dt-addrow-btn" class="btn btn-primary"><i class="demo-pli-plus"></i> Add Row</button>
+            </div>
+
+            <div id="dt-editrow-form" style="display: none">
+                {{ oadd.desc }}
+            </div>
+
+            <div class="panel-body">
+                <table id="demo-dt-addrow" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            {% for i in thead_list %}
+                                <th>{{ i }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% autoescape off %}
+                            {% for row in hg %}
+                                <tr>
+                                    {% for field in row %}
+                                        <td>{{ field }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        {% endautoescape %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <!--===================================================-->
+    <!--End page content-->
+{% endblock %}
+
+
+
+

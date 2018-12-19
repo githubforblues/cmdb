@@ -5,10 +5,13 @@ from django.utils.decorators import method_decorator
 from hostmanager import forms
 from .tableconfig import servicemanager
 from .tableconfig import hostgroupmanager
+from .tableconfig import autodeploy
 from .utils import configanalysis, dataget
 from json import dumps, loads
 from django.db.models import Q
 
+
+# ------------------------------------------------- #
 
 # 用户登录
 class Login(views.View):
@@ -143,7 +146,7 @@ class SMdelete(views.View):
     def post(self, request, *args, **kwargs):
         data = request.POST.get('rowid', None)
         rowlist = data.split(',')
-        # result = [ models.ServiceManager.objects.filter(id=rowid).delete() for rowid in rowlist ]           # 删除功能暂时关闭
+        result = [ models.ServiceManager.objects.filter(id=rowid).delete() for rowid in rowlist ]           # 删除功能暂时关闭
         return HttpResponse('success')
 
 # 服务管理，更改保存
@@ -203,6 +206,57 @@ class SMadd(views.View):
         # if not jamrow:
         #     models.JumpServerAccountManager.objects.create(userid_id=item.get('用户名'), serveraccount_id=account.id)
 
+        return HttpResponse('success')
+
+# ------------------------------------------------- #
+
+# 发布
+class AD(views.View):
+    @method_decorator(auth_check)
+    def get(self, request, *args, **kwargs):
+        msg = {}
+        user = request.session.get('user', '游客')
+        msg.update({'user': user})
+
+        thead_list, quertset, editformobj, addformobj = configanalysis.configanalysis(autodeploy.config)
+
+        return render(request, 'autodeploy.html', {'msg': msg, 'thead_list': thead_list, 'oadd': addformobj, 'oedit': editformobj, 'hg':quertset})
+
+# 发布，条目删除
+class ADdelete(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        data = request.POST.get('rowid', None)
+        rowlist = data.split(',')
+        result = [ models.ServiceDeployStatus.objects.filter(id=rowid).delete() for rowid in rowlist ]           # 删除功能暂时关闭
+        return HttpResponse('success')
+
+# 发布，更改保存
+class ADedit(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
+            item = loads(item)
+            models.ServiceDeployStatus.objects.filter(id=item['rowid']).update(desc=item['描述信息'])
+        return HttpResponse('success')
+
+# 发布，菜单初始化数据获取
+class ADdatainit(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        rowid = request.POST.get('rowid')
+        label = request.POST.get('label')
+        type = request.POST.get('type')
+        data = dataget.dataget(autodeploy, type, label, rowid)
+        return HttpResponse(dumps(dict(data)))
+
+# 发布，新增数据
+class ADadd(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
+            item = loads(item)
+            ads = models.ServiceDeployStatus.objects.get_or_create(service_id=item['服务名'], status=False, desc=item['描述信息'])
         return HttpResponse('success')
 
 # ------------------------------------------------- #

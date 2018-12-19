@@ -391,7 +391,7 @@ function deleterow_button_click() {
     rowid = $(this).attr('rowid');
     uri_prefix = $(this).attr('uri');
 
-    ajax_data_send({'rowid':rowid}, uri_prefix, deletecallback)
+    ajax_data_send({'rowid': rowid}, uri_prefix, deletecallback)
 }
 
 // 数据发送成功后的回调函数(本来是要调用tabledata的API，但因为刷新了页面，所以不写也没有关系)

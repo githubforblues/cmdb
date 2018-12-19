@@ -102,7 +102,7 @@ def operationbuttonhtml(config, id):
             cssclass = 'btn-danger'
         elif button_type == 'edit':
             cssclass = 'btn-info'
-        else: cssclass = 'btn-danger'
+        else: cssclass = 'btn-warning'
         htmlstring += '<a class="btn btn-xs {}" href="#" button_type="{}" uri="{}" rowid="{}">{}</a>'.format(cssclass, button_type, i['uri_prefix'], id, i['name'])
 
     return htmlstring

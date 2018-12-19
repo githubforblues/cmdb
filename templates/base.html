@@ -213,7 +213,7 @@
 						                <a href="/servicemanager">
 						                    <i class="demo-psi-boot-2"></i>
 						                    <span class="menu-title">
-												<strong>服务管理</strong>
+												<strong>服务列表</strong>
 {#                                                <span class="pull-right badge badge-warning">24</span>#}
 											</span>
 						                </a>
@@ -222,17 +222,36 @@
                                     <li {% block active-link-li-4 %}{% endblock %}>
                                         <a href="#" aria-expanded="true">
                                             <i class="demo-psi-mail"></i>
-                                            <span class="menu-title">配置管理</span>
+                                            <span class="menu-title">自动发布</span>
                                             <i class="arrow"></i>
                                         </a>
                                         <ul class="collapse" aria-expanded="false" style>
                                             <li {% block active-link-li-4-1 %}{% endblock %}>
+                                                <a href="/autodeploy">一键发布</a>
+                                            </li>
+                                            <li {% block active-link-li-4-2 %}{% endblock %}>
+                                                <a href="/hostgroupmanager">发布配置</a>
+                                            </li>
+                                            <li {% block active-link-li-4-3 %}{% endblock %}>
+                                                <a href="/hostgroupmanager">发布进度</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li {% block active-link-li-5 %}{% endblock %}>
+                                        <a href="#" aria-expanded="true">
+                                            <i class="demo-psi-mail"></i>
+                                            <span class="menu-title">配置管理</span>
+                                            <i class="arrow"></i>
+                                        </a>
+                                        <ul class="collapse" aria-expanded="false" style>
+                                            <li {% block active-link-li-5-1 %}{% endblock %}>
                                                 <a href="/hostgroupmanager">主机组管理</a>
                                             </li>
                                         </ul>
                                     </li>
 
-						            <li {% block active-link-li-5 %}{% endblock %}>
+						            <li {% block active-link-li-6 %}{% endblock %}>
 						                <a href="/documents/">
 						                    <i class="demo-psi-receipt-4"></i>
 						                    <span class="menu-title">
@@ -240,6 +259,7 @@
 											</span>
 						                </a>
 						            </li>
+
                                 </ul>
                             </div>
                         </div>
