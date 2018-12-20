@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from hostmanager import views
 from apiserver import views as api_views
+from scripts_execute_engine import views as scripts_views
 
 urlpatterns = [
     url(r'^$', views.Login.as_view()),
@@ -27,6 +28,8 @@ urlpatterns = [
     url(r'^hostlist/', views.HostList.as_view()),
     url(r'^hostedit_(?P<hostname>.*)/', views.HostEdit.as_view()),
     url(r'^hostedit/', views.HostEdit.as_view()),
+
+    url(r'^autodeploy/deploy/', scripts_views.autodeploy.as_view()),
 
     url(r'^autodeploy/delete/', views.ADdelete.as_view()),
     url(r'^autodeploy/edit/', views.ADedit.as_view()),
@@ -56,6 +59,10 @@ urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
 ]
+
+
+
+
 
 
 

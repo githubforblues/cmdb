@@ -33,7 +33,7 @@ config = {
         },
         {
             'name': '发布该服务',
-            'button_type': 'other',
+            'button_type': 'deploy',
             'uri_prefix': '/autodeploy/deploy/',
             'edit_flag': 'id',
         },

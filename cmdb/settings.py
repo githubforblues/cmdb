@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hostmanager.apps.HostmanagerConfig',
     'apiserver',
+    'scripts_execute_engine',
 ]
 
 MIDDLEWARE = [
