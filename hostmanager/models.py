@@ -73,4 +73,25 @@ class ServiceDeployStatus(models.Model):
     service = models.ForeignKey(ServiceManager)
 
 
+class ProjectPackage(models.Model):                        # 打包的项目列表
+    projectname = models.CharField(max_length=256)         # 项目名称
+    lastpackagetime = models.DateTimeField(null=True)      # 最近一次打包时间
+
+
+class ImageList(models.Model):
+    imagename = models.CharField(max_length=256)           # 镜像名称
+
+
+class ServiceDeployConfig(models.Model):
+    desc = models.CharField(max_length=256)
+    lastpackagetime = models.DateTimeField(null=True)      # 最近一次发布时间
+
+    service = models.ForeignKey(ServiceManager)
+    project = models.ForeignKey(ProjectPackage)
+    image = models.ForeignKey(ImageList)
+
+
+
+
+
 

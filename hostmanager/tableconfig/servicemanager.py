@@ -61,19 +61,15 @@ config = {
     'editrow':[
         {
             'name': '服务所在节点',
-            'form_name': 'inhost',
+            'form_name': 'hostinstancename',
             'form_type': 'select',
             'model': 'EteamsHost',
             'field': 'hostinstancename',
         },
         {
-            'name': '路径',
-            'form_name': 'path',
-            'form_type': 'text',
-        },
-        {
-            'name': '端口号',
-            'form_name': 'port',
+            'name': '容器数量',
+            'field': 'number',
+            'form_name': 'number',
             'form_type': 'text',
         },
         {

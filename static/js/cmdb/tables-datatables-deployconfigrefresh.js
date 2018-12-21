@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     $('#demo-dt-addrow').find('a').each(function () {
-        if ($(this).attr('button_type') == 'deploy') {                  // 为条目中的编辑按钮绑定事件
+        if ($(this).attr('button_type') == 'refresh') {
             $(this).on('click', deploy_button_click);
         }
     })

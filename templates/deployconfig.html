@@ -14,6 +14,7 @@
 
     <!--DataTables Sample [ SAMPLE ]-->
     <script src="/static/js/demo/tables-datatables-custom.js"></script>
+    <script src="/static/js/cmdb/tables-datatables-deployconfigrefresh.js"></script>
     <script src="/static/js/demo/form-component.js"></script>
 
 
@@ -23,7 +24,11 @@
 
 {% endblock %}
 
-{% block active-link-li-3 %}
+{% block active-link-li-4 %}
+    class="active-sub active"
+{% endblock %}
+
+{% block active-link-li-4-2 %}
     class="active-link"
 {% endblock %}
 
@@ -31,7 +36,7 @@
     <!--Page Title-->
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <div id="page-title">
-        <h1 class="page-header text-overflow">服务列表</h1>
+        <h1 class="page-header text-overflow">发布配置</h1>
     </div>
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <!--End page title-->
@@ -42,14 +47,14 @@
 
         <div class="panel">
             <div class="panel-heading">
-                <h3 class="panel-title">生产环境服务管理（基于docker）</h3>
+                <h3 class="panel-title">此处管理发布配置</h3>
             </div>
 
             <div id="dt-addrow-addform-hide" class="panel-body" style="display: none">
-                <form class="form-horizontal" submitto="/servicemanager/add/">
+                <form class="form-horizontal" submitto="/deployconfig/add/">
                     {{ oadd.servicename }}
-                    {{ oadd.hostinstancename }}
-                    {{ oadd.number }}
+                    {{ oadd.imagename }}
+                    {{ oadd.projectname }}
                     {{ oadd.desc }}
                 </form>
             </div>
@@ -59,9 +64,9 @@
             </div>
 
             <div id="dt-editrow-form" style="display: none">
-                {{ oedit.hostinstancename }}
-                {{ oedit.number }}
                 {{ oedit.desc }}
+                {{ oedit.imagename }}
+                {{ oedit.projectname }}
             </div>
 
             <div class="panel-body">

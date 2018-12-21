@@ -30,16 +30,21 @@ class autodeploy(views.View):
         rowid = request.POST['rowid']
 
         script_name = 'auto_deploy.py'
-        out = subprocess.check_output("cd {}; python {}".format(SCRIPTS_DIR, script_name), stderr=subprocess.STDOUT, shell=True).strip()
+        out = subprocess.check_output("cd {}; python {};".format(SCRIPTS_DIR, script_name), stderr=subprocess.STDOUT, shell=True).strip()
 
         models.ServiceDeployStatus.objects.filter(id=rowid).update(status=True)
 
         return HttpResponse('success')
 
 
+# 镜像列表和项目打包列表刷新
+class deployconfigrefresh(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        script_name = 'deployconfigrefresh.py'
+        out = subprocess.check_output("cd {}; python {};".format(SCRIPTS_DIR, script_name), stderr=subprocess.STDOUT, shell=True).strip()
 
-
-
+        return HttpResponse('success')
 
 
 

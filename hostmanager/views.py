@@ -6,6 +6,7 @@ from hostmanager import forms
 from .tableconfig import servicemanager
 from .tableconfig import hostgroupmanager
 from .tableconfig import autodeploy
+from .tableconfig import deployconfig
 from .utils import configanalysis, dataget
 from json import dumps, loads
 from django.db.models import Q
@@ -257,6 +258,57 @@ class ADadd(views.View):
         for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
             item = loads(item)
             ads = models.ServiceDeployStatus.objects.get_or_create(service_id=item['服务名'], status=False, desc=item['描述信息'])
+        return HttpResponse('success')
+
+# ------------------------------------------------- #
+
+# 发布配置
+class DC(views.View):
+    @method_decorator(auth_check)
+    def get(self, request, *args, **kwargs):
+        msg = {}
+        user = request.session.get('user', '游客')
+        msg.update({'user': user})
+
+        thead_list, quertset, editformobj, addformobj = configanalysis.configanalysis(deployconfig.config)
+
+        return render(request, 'deployconfig.html', {'msg': msg, 'thead_list': thead_list, 'oadd': addformobj, 'oedit': editformobj, 'hg':quertset})
+
+# 发布配置，条目删除
+class DCdelete(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        data = request.POST.get('rowid', None)
+        rowlist = data.split(',')
+        result = [ models.ServiceDeployConfig.objects.filter(id=rowid).delete() for rowid in rowlist ]           # 删除功能暂时关闭
+        return HttpResponse('success')
+
+# 发布配置，更改保存
+class DCedit(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
+            item = loads(item)
+            models.ServiceDeployConfig.objects.filter(id=item['rowid']).update(desc=item['描述信息'], image_id=item['镜像名称'], project_id=item['项目名称'])
+        return HttpResponse('success')
+
+# 发布配置，菜单初始化数据获取
+class DCdatainit(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        rowid = request.POST.get('rowid')
+        label = request.POST.get('label')
+        type = request.POST.get('type')
+        data = dataget.dataget(deployconfig, type, label, rowid)
+        return HttpResponse(dumps(dict(data)))
+
+# 发布配置，新增数据
+class DCadd(views.View):
+    @method_decorator(auth_check)
+    def post(self, request, *args, **kwargs):
+        for item in request.POST :          # 如果传递的ajax数据为内嵌列表的字典，就必须要这样处理
+            item = loads(item)
+            ads = models.ServiceDeployConfig.objects.get_or_create(service_id=item['服务名'], image_id=item['镜像名称'], project_id=item['项目名称'], desc=item['描述信息'])
         return HttpResponse('success')
 
 # ------------------------------------------------- #
