@@ -4,11 +4,9 @@ from hostmanager import models
 from django.utils.decorators import method_decorator
 from json import loads
 import os
-import subprocess
 
+from scripts_execute_engine.cmdb_scripts import test_auto_deploy
 
-# 脚本存放目录
-SCRIPTS_DIR = 'scripts_execute_engine/cmdb_scripts/'
 
 
 # 登陆验证装饰器
@@ -29,15 +27,25 @@ class autodeploy(views.View):
     def post(self, request, *args, **kwargs):
         rowid = request.POST['rowid']
 
+        # 将发布配置中的状态更改为"正在发布"
+        models.ServiceDeployStatus.objects.filter(id=rowid).update(status=True)
+
         # 在发布列表中新增条目
         models.ServiceDeployList.objects.create(service_id=rowid, status='wait', progress=0)
 
         # 调用脚本开始发布
-        script_name = 'auto_deploy.py'
-        out = subprocess.check_output("cd {}; python {};".format(SCRIPTS_DIR, script_name), stderr=subprocess.STDOUT, shell=True).strip()
+        # script_name = 'auto_deploy.py'
+        script_name = 'test_auto_deploy.py'
 
-        # 将发布配置中的状态更改为"正在发布"
-        models.ServiceDeployStatus.objects.filter(id=rowid).update(status=True)
+        try:
+            models.ScriptsExecStatus.objects.get(scriptname=script_name, status=1)
+        except:
+            models.ScriptsExecStatus.objects.filter(scriptname=script_name).update(status=1)
+            models.ScriptsExecStatus.objects.get_or_create(scriptname=script_name, status=1)
+
+            test_auto_deploy.main()
+        else:
+            pass
 
         return HttpResponse('success')
 

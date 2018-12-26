@@ -77,7 +77,6 @@ class ImageList(models.Model):                            # docker镜像列表
 
 class ServiceDeployConfig(models.Model):
     desc = models.CharField(max_length=256)
-    lastpackagetime = models.DateTimeField(null=True)     # 最近一次发布时间
 
     service = models.ForeignKey(ServiceManager)
     project = models.ForeignKey(ProjectPackage)
@@ -93,11 +92,15 @@ class ServiceDeployStatus(models.Model):                  # 发布表
 
 
 class ServiceDeployList(models.Model):                    # 发布中的服务列表
-    status = models.CharField(max_length=64)              # 发布状态
+    status = models.CharField(max_length=64, default='wait')           # 发布状态
     progress = models.IntegerField(default=0)             # 发布进度
 
     service = models.ForeignKey(ServiceDeployStatus)
 
+
+class ScriptsExecStatus(models.Model):                    # 脚本执行状态
+    scriptname = models.CharField(max_length=256)
+    status = models.IntegerField(default=0)
 
 
 
