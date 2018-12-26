@@ -29,9 +29,14 @@ class autodeploy(views.View):
     def post(self, request, *args, **kwargs):
         rowid = request.POST['rowid']
 
+        # 在发布列表中新增条目
+        models.ServiceDeployList.objects.create(service_id=rowid, status='wait', progress=0)
+
+        # 调用脚本开始发布
         script_name = 'auto_deploy.py'
         out = subprocess.check_output("cd {}; python {};".format(SCRIPTS_DIR, script_name), stderr=subprocess.STDOUT, shell=True).strip()
 
+        # 将发布配置中的状态更改为"正在发布"
         models.ServiceDeployStatus.objects.filter(id=rowid).update(status=True)
 
         return HttpResponse('success')
@@ -41,7 +46,7 @@ class autodeploy(views.View):
 class deployconfigrefresh(views.View):
     @method_decorator(auth_check)
     def post(self, request, *args, **kwargs):
-        script_name = 'deployconfigrefresh.py'
+        script_name = 'deploy_config_refresh.py'
         out = subprocess.check_output("cd {}; python {};".format(SCRIPTS_DIR, script_name), stderr=subprocess.STDOUT, shell=True).strip()
 
         return HttpResponse('success')

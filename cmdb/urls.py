@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'^autodeploy/add/', views.ADadd.as_view()),
     url(r'^autodeploy/', views.AD.as_view()),
 
-    # 发布配置，刷新，脚本执行接口
+    # 发布配置，刷新，脚本执行接口https://blog.csdn.net/weixin_38956287/article/details/80423607
     url(r'^deployconfig/refresh/', scripts_views.deployconfigrefresh.as_view()),
 
     # 发布配置
@@ -54,6 +54,13 @@ urlpatterns = [
     url(r'^deployconfig/datainit/', views.DCdatainit.as_view()),
     url(r'^deployconfig/add/', views.DCadd.as_view()),
     url(r'^deployconfig/', views.DC.as_view()),
+
+    # 发布进度
+    url(r'^deployprogress/delete/', views.DPdelete.as_view()),
+    url(r'^deployprogress/edit/', views.DPedit.as_view()),
+    url(r'^deployprogress/datainit/', views.DPdatainit.as_view()),
+    url(r'^deployprogress/add/', views.DPadd.as_view()),
+    url(r'^deployprogress/', views.DP.as_view()),
 
     # 服务管理
     url(r'^servicemanager/delete/', views.SMdelete.as_view()),

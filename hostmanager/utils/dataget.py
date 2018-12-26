@@ -17,9 +17,14 @@ def dataget(tableconfig, exterkeyname, interkeyname, rowid):
         for item in tableconfig.config[exterkeyname]:
             if item['name'] == interkeyname:
                 if item.get('datasource_extra', None):
-                    pass
+                    handler = getattr(tableconfig, item['datasource_extra'])          # 获取自定义方法
+                    table = getattr(models, item.get('model'))
+                    data = handler(table)
+                    return data
                 else:
                     table = getattr(models, item.get('model'))
                     data = table.objects.all().values_list('id', item.get('field'))
                     return data
+
+
 

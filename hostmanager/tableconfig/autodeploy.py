@@ -2,12 +2,12 @@ config = {
     'model': 'ServiceDeployStatus',
     'table': [
         {
-            'name': '服务名',
-            'field': 'service_id__servicename',
+            'name': '待发布服务',
+            'field': 'service_id__service_id__servicename',
         },
         {
             'name': '描述信息',
-            'field': 'desc'
+            'field': 'desc',
         },
         {
             'name': '上一次发布时间',
@@ -40,11 +40,11 @@ config = {
     ],
     'addrow': [
         {
-            'name': '服务名',
+            'name': '待发布服务',
             'form_name': 'servicename',
             'form_type': 'select',
-            'model': 'ServiceManager',
-            'field': 'servicename',
+            'model': 'ServiceDeployConfig',
+            'field': 'service_id__servicename',
         },
         {
             'name': '描述信息',
@@ -64,7 +64,15 @@ config = {
 
 
 
+def service_data_distinct_get(modelobj):
+    servicename = modelobj.objects.all().values_list('servicename').distinct()
 
+    data = []
+    for item in servicename:
+        item = item[0]
+        data.append(modelobj.objects.filter(servicename=item).values_list('id', 'servicename')[0])
+
+    return data
 
 
 

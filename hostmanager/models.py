@@ -1,10 +1,10 @@
 from django.db import models
 
 
-class SystemUser(models.Model):                         # 用户表
-    username = models.CharField(max_length = 64)        # 用户名
-    password = models.CharField(max_length = 64)        # 密码
-    is_admin = models.BooleanField(default = True)      # 是否管理员
+class SystemUser(models.Model):                           # 用户表
+    username = models.CharField(max_length = 64)          # 用户名
+    password = models.CharField(max_length = 64)          # 密码
+    is_admin = models.BooleanField(default = True)        # 是否管理员
 
 
 class EteamsHost(models.Model):
@@ -43,15 +43,6 @@ class Empty(models.Model):                                # 空表，用于条�
     empty = models.CharField(max_length=1)
 
 
-class ServiceManager(models.Model):                       # 服务管理表
-    servicename = models.CharField(max_length=64)
-    port = models.CharField(max_length=64)
-    path = models.CharField(max_length=64)
-    number = models.IntegerField(default=0)
-    desc = models.CharField(max_length=64)
-    inhost = models.ForeignKey(EteamsHost)
-
-
 class DocumentDir(models.Model):                          # 文档目录表
     dirname = models.CharField(max_length=256)
 
@@ -65,32 +56,47 @@ class Documents(models.Model):                            # 文档表
     docdir = models.ForeignKey(DocumentDir)
 
 
-class ServiceDeployStatus(models.Model):
-    desc = models.CharField(max_length=256)
-    status = models.BooleanField(default=True)            # 当前发布状态（系统异常时，需要人工介入处理该值的不正确情况）
-    lastdeploytime = models.DateTimeField(null=True)      # 最近一次发布时间
+class ServiceManager(models.Model):                       # 服务管理表
+    servicename = models.CharField(max_length=64)
+    port = models.CharField(max_length=64)                #（弃用）
+    path = models.CharField(max_length=64)                #（弃用）
+    number = models.IntegerField(default=0)
+    desc = models.CharField(max_length=64)
 
-    service = models.ForeignKey(ServiceManager)
-
-
-class ProjectPackage(models.Model):                        # 打包的项目列表
-    projectname = models.CharField(max_length=256)         # 项目名称
-    lastpackagetime = models.DateTimeField(null=True)      # 最近一次打包时间
+    inhost = models.ForeignKey(EteamsHost)
 
 
-class ImageList(models.Model):
-    imagename = models.CharField(max_length=256)           # 镜像名称
+class ProjectPackage(models.Model):                       # 打包项目列表
+    projectname = models.CharField(max_length=256)        # 项目名称
+    lastpackagetime = models.DateTimeField(null=True)     # 最近一次打包时间
+
+
+class ImageList(models.Model):                            # docker镜像列表
+    imagename = models.CharField(max_length=256)          # 镜像名称
 
 
 class ServiceDeployConfig(models.Model):
     desc = models.CharField(max_length=256)
-    lastpackagetime = models.DateTimeField(null=True)      # 最近一次发布时间
+    lastpackagetime = models.DateTimeField(null=True)     # 最近一次发布时间
 
     service = models.ForeignKey(ServiceManager)
     project = models.ForeignKey(ProjectPackage)
     image = models.ForeignKey(ImageList)
 
 
+class ServiceDeployStatus(models.Model):                  # 发布表
+    desc = models.CharField(max_length=256)
+    status = models.BooleanField(default=True)            # 当前发布状态（系统异常时，需要人工介入处理该值的不正确情况）
+    lastdeploytime = models.DateTimeField(null=True)      # 最近一次发布时间
+
+    service = models.ForeignKey(ServiceDeployConfig)
+
+
+class ServiceDeployList(models.Model):                    # 发布中的服务列表
+    status = models.CharField(max_length=64)              # 发布状态
+    progress = models.IntegerField(default=0)             # 发布进度
+
+    service = models.ForeignKey(ServiceDeployStatus)
 
 
 

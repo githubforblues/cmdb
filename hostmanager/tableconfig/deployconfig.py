@@ -49,6 +49,7 @@ config = {
             'form_type': 'select',
             'model': 'ServiceManager',
             'field': 'servicename',
+            'datasource_extra': 'service_data_distinct_get',
         },
         {
             'name': '描述信息',
@@ -96,8 +97,23 @@ config = {
 
 
 
+def service_data_distinct_get(modelobj):
+    servicename = modelobj.objects.all().values_list('servicename').distinct()
+
+    data = []
+    for item in servicename:
+        item = item[0]
+        data.append(modelobj.objects.filter(servicename=item).values_list('id', 'servicename')[0])
+
+    return data
+
+
+
+
+
 # 1. 时间戳识别
-# 2. 镜像文件和项目包刷新
+
+
 
 
 
