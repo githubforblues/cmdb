@@ -22,26 +22,6 @@ class JS_accountget(views.View):
         return HttpResponse(json.dumps(account))
 
 
-# 自动发布，条目获取
-class ADrowget(views.View):
-    def get(self, request, *args, **kwargs):
-        rowcount = models.ServiceDeployList.objects.count()
-        if rowcount:
-            row = models.ServiceDeployList.objects.values_list('id', 'service_id__service_id__service_id__servicename')[0]
-            models.ServiceDeployList.objects.filter(id=row[0]).delete()
-            return HttpResponse(json.dumps(row))
-        else:
-            return HttpResponse('empty')
-
-
-# 自动发布，停止脚本
-class ADscriptdelete(views.View):
-    def get(self, request, *args, **kwargs):
-        scriptname = request.get_full_path().split('?')[1].split('=')[1]
-
-        models.ScriptsExecStatus.objects.filter(scriptname=scriptname).delete()
-        return HttpResponse('success')
-
 
 
 

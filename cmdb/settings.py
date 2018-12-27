@@ -126,3 +126,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+CELERY_BROKER_URL = 'redis://10.168.168.168:6379'
+CELERY_RESULT_BACKEND = 'redis://10.168.168.168:6379'
+

@@ -1,34 +1,33 @@
+from .. import tasks
+import json
+from hostmanager import models
+from celery.result import AsyncResult
 
-def main():
+def main(rowid):
+    id = models.ServiceDeployStatus.objects.get(id=rowid).service_id
+    configinfo = models.ServiceDeployConfig.objects.get(id=id)
+    hostinfo = models.ServiceManager.objects.filter(servicename=configinfo.service.servicename).values_list('inhost_id__hostname', 'number')
 
-    import subprocess
-    import requests
-    import random
-    import sys
-    import time
+    tmplist = [configinfo.service.servicename, configinfo.image.imagename, configinfo.project.projectname,]
 
-    API_SERVER_IP = '127.0.0.1'
-    API_SERVER_PORT = '8100'
+    data = []
+    for item in hostinfo:
+        tmplist1 = tmplist[:]
+        tmplist1.append(item[0]);tmplist1.append(item[1])
+        data.append(tmplist1)
 
-    API_DEPLOY_ROW_GET = '/api/autodeploy/rowget/'
-    API_DEPLOY_SERVICE_DELETE = '/api/autodeploy/scriptdelete/'
+    res = tasks.deploy.delay(json.dumps(data))                # 同一个服务中的多个docker容器需要串行执行，灰度发布模式
+    taskid = res.id
 
     while True:
-        url = 'http://{}:{}{}'.format(API_SERVER_IP, API_SERVER_PORT, API_DEPLOY_ROW_GET)
-        rowdata = requests.get(url).text
-        if rowdata == 'empty':
-            url = 'http://{}:{}{}'.format(API_SERVER_IP, API_SERVER_PORT, API_DEPLOY_SERVICE_DELETE)
-            url = url + '?scriptname=test_auto_deploy.py'
-            result = requests.get(url)
+        res = AsyncResult(id=taskid)                          # 在任务完成之前会阻塞
+        print(res.get())
+        if res.get() == 0:
+            models.ServiceDeployStatus.objects.filter(id=rowid).update(status=False)
+            print('false')
             return 0
         else:
-            # out = subprocess.check_output("touch testfile-{}".format(random.randint(10000, 99999)), stderr=subprocess.STDOUT,shell=True)
-            time.sleep(10)
-            print('发布...')
-
-
-if __name__ == '__main__':
-    main()
+            return 1
 
 
 

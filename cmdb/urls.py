@@ -86,10 +86,6 @@ urlpatterns = [
     url(r'^api/jumpserver/auth/', api_views.JS_auth.as_view()),
     url(r'^api/jumpserver/accountget/', api_views.JS_accountget.as_view()),
 
-    # 自动发布API
-    url(r'^api/autodeploy/rowget/', api_views.ADrowget.as_view()),
-    url(r'^api/autodeploy/scriptdelete/', api_views.ADscriptdelete.as_view()),
-
 
     # url(r'^admin/', admin.site.urls),
 ]
